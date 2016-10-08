@@ -41,21 +41,19 @@ local function convertToTensor(files)
 end
 
 function M.exec(opt, cacheFile)
-   print("=> Downloading CIFAR-10 dataset from " .. URL)
-   local ok = os.execute('curl ' .. URL .. ' | tar xz -C gen/')
-   assert(ok == true or ok == 0, 'error downloading CIFAR-10')
+   --print("=> Downloading CIFAR-10 dataset from " .. URL)
+   --local ok = os.execute('curl ' .. URL .. ' | tar xz -C gen/')
+   --assert(ok == true or ok == 0, 'error downloading CIFAR-10')
 
-   print(" | combining dataset into a single file")
-   local trainData = convertToTensor({
-      'gen/cifar-10-batches-t7/data_batch_1.t7',
-      'gen/cifar-10-batches-t7/data_batch_2.t7',
-      'gen/cifar-10-batches-t7/data_batch_3.t7',
-      'gen/cifar-10-batches-t7/data_batch_4.t7',
-      'gen/cifar-10-batches-t7/data_batch_5.t7',
-   })
-   local testData = convertToTensor({
-      'gen/cifar-10-batches-t7/test_batch.t7',
-   })
+   print(" | loading training data")
+   --local trainData = convertToTensor({
+   local trainData = torch.load( '/root/datasets/cifar-10/v0/cifar10-train.t7' )
+   --})
+
+   print(" | loading testing data")
+   --local testData = convertToTensor({
+   local testData  = torch.load( '/root/datasets/cifar-10/v0/cifar10-test.t7' )
+   --})
 
    print(" | saving CIFAR-10 dataset to " .. cacheFile)
    torch.save(cacheFile, {
