@@ -35,12 +35,29 @@ function CifarDataset:size()
 end
 
 -- Computed from entire CIFAR-10 training set
-local meanstd = {
-   mean = {125.3, 123.0, 113.9},
-   std  = {63.0,  62.1,  66.7},
-}
+--local meanstd = {
+--   mean = {125.3, 123.0, 113.9},
+--   std  = {63.0,  62.1,  66.7},
+--}
 
 function CifarDataset:preprocess()
+
+   local r_mean, g_mean, b_mean, r_std,  g_std,  b_std
+   local file = io.open("mean_std.txt")
+
+   if file then
+     for line in file:lines() do
+        r_mean,g_mean,b_mean,r_std,g_std,b_std = unpack(line:split(" "))
+     end
+   else
+     error('Cannot find mean and std file');
+   end
+
+   local meanstd = {
+     mean = {tonumber(r_mean), tonumber(g_mean), tonumber(b_mean)},
+     std  = {tonumber(r_std ), tonumber(g_std ), tonumber(b_std )},
+   }
+
    if self.split == 'train' then
       return t.Compose{
          t.ColorNormalize(meanstd),
