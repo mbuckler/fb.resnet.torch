@@ -61,8 +61,8 @@ for vers in range(0,len(pipes_to_run)):
   fout.close() 
 
   # Convert data to t7 files
-  call("th /root/cifar.torch/Cifar10BinToTensor.lua -path /datasets/cifar-10/v0/",
-    shell=True)
+  call("th /root/cifar.torch/Cifar10BinToTensor.lua -path /datasets/cifar-10/v"
+         +str(pipes_to_run[vers])+"/", shell=True)
 
   print("Now running training for Version "+str(pipes_to_run[vers]))
 
